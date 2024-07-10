@@ -37,11 +37,16 @@ public class Spawner : MonoBehaviour
     }
 
 
-    private Vector2 ReturnFreePlacePosition()
+    private Vector2 TryGetFreePlace()
     {
         RaycastHit2D hit;
 
         Ray ray = _camera.ScreenPointToRay(CalculateBackGroundSize());
+
+        if (Physics2D.Raycast(ray, out hit))
+        {
+
+        }
 
         return new Vector2();
     }
