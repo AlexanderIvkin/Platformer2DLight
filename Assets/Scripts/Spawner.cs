@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Spawner : MonoBehaviour
 {
@@ -33,22 +34,31 @@ public class Spawner : MonoBehaviour
 
     private void Create()
     {
-
+        Instantiate(_coin, )пока тут
     }
 
 
-    private Vector2 TryGetFreePlace()
+    private bool TryGetFreePlace(out Vector2 freePlaceCoordinate)
     {
-        RaycastHit2D hit;
+        bool isFinding = false;
+        freePlaceCoordinate = Vector2.zero;
+
+        RaycastHit hit;
 
         Ray ray = _camera.ScreenPointToRay(CalculateBackGroundSize());
 
-        if (Physics2D.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit))
         {
+            Transform objectHit = hit.transform;
 
+            if (objectHit.TryGetComponent<Background>(out _))
+            {
+                isFinding = true;
+                freePlaceCoordinate = hit.point;
+            }
         }
 
-        return new Vector2();
+        return isFinding;
     }
 
     private Vector3 CalculateBackGroundSize()
