@@ -16,7 +16,7 @@ public class Spawner : MonoBehaviour
 
     private void Awake()
     {
-
+        StartCoroutine(Spawn());
     }
 
     private IEnumerator Spawn()
@@ -25,26 +25,14 @@ public class Spawner : MonoBehaviour
 
         while (_coins.Count < _maxCount)
         {
-
-
-            yield return wait;
-        }
-
-    }
-
-    private IEnumerator Create()
-    {
-        while (_coins.Count < _maxCount)
-        {
             if (TryGetFreePlace(out Vector2 spawnPosition))
             {
                 Instantiate(_coin, spawnPosition, Quaternion.identity);
             }
 
-            yield return null;
+            yield return wait;
         }
     }
-
 
     private bool TryGetFreePlace(out Vector2 freePlaceCoordinate)
     {
@@ -59,7 +47,7 @@ public class Spawner : MonoBehaviour
         {
             Transform objectHit = hit.transform;
 
-            if (objectHit.TryGetComponent<Background>(out _))
+            if (objectHit.TryGetComponent<BackGround>(out _))
             {
                 isFinding = true;
                 freePlaceCoordinate = hit.point;
