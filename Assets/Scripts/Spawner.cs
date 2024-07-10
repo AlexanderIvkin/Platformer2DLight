@@ -32,9 +32,17 @@ public class Spawner : MonoBehaviour
 
     }
 
-    private void Create()
+    private IEnumerator Create()
     {
-        Instantiate(_coin, )пока тут
+        while (_coins.Count < _maxCount)
+        {
+            if (TryGetFreePlace(out Vector2 spawnPosition))
+            {
+                Instantiate(_coin, spawnPosition, Quaternion.identity);
+            }
+
+            yield return null;
+        }
     }
 
 
@@ -66,6 +74,6 @@ public class Spawner : MonoBehaviour
         float boundX = 0.5f * _frame.transform.localScale.x;
         float boundY = 0.5f * _frame.transform.localScale.y;
 
-        return new Vector3(Random.Range(-boundX, boundX) ,Random.Range(-boundY, boundY));
+        return new Vector3(Random.Range(-boundX, boundX), Random.Range(-boundY, boundY));
     }
 }
