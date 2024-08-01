@@ -28,8 +28,6 @@ public class Spawner : MonoBehaviour
 
             yield return wait;
         }
-
-        yield return null;
     }
 
     private Vector2 GetFreePlace()
@@ -49,8 +47,8 @@ public class Spawner : MonoBehaviour
     {
         float scaleFactor = 0.5f;
 
-        float boundX = scaleFactor * _ground.gameObject.transform.localScale.x;
-        float boundY = scaleFactor * _ground.gameObject.transform.localScale.y;
+        float boundX = scaleFactor * _ground.Width;
+        float boundY = scaleFactor * _ground.Height;
 
         return new Vector2(Random.Range(-boundX, boundX), Random.Range(-boundY, boundY));
     }

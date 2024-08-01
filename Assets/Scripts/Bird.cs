@@ -87,8 +87,6 @@ public class Bird : MonoBehaviour
 
         while (_isAlive)
         {
-            StopAllCoroutines();
-
             if (_isFree)
             {
                 if (_isSafely)
@@ -101,8 +99,6 @@ public class Bird : MonoBehaviour
             }
             else
             {
-                StopAllCoroutines();
-
                 StartCoroutine(Idle(ReturnTimeOfAction));
             }
 
@@ -134,10 +130,9 @@ public class Bird : MonoBehaviour
     {
         Debug.Log("РАНЭВЭЙ");
 
-        if (true)
+        if (target.gameObject.TryGetComponent<Player>(out _))
         {
             Debug.Log("Готовим атаку");
-            StopAllCoroutines();
 
             float attackDistance = 0.2f;
 
