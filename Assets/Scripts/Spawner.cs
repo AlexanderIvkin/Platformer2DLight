@@ -39,28 +39,17 @@ public class Spawner : MonoBehaviour
         bool isFinding = false;
         freePlaceCoordinate = Vector2.zero;
 
-        RaycastHit hit;
-
-        Ray ray = _camera.ScreenPointToRay(CalculateBackGroundSize());
-
-        if (Physics.Raycast(ray, out hit))
-        {
-            Transform objectHit = hit.transform;
-
-            if (objectHit.TryGetComponent<BackGround>(out _))
-            {
-                isFinding = true;
-                freePlaceCoordinate = hit.point;
-            }
-        }
+        if (Physics2D.OverlapCircle(CalculateBackGroundSize(), 0.5f, 1, -100, 100) > 0) вот тут проблемка
 
         return isFinding;
     }
 
     private Vector3 CalculateBackGroundSize()
     {
-        float boundX = 0.5f * _frame.transform.localScale.x;
-        float boundY = 0.5f * _frame.transform.localScale.y;
+        float scaleFactor = 0.5f;
+
+        float boundX = scaleFactor * _frame.transform.localScale.x;
+        float boundY = scaleFactor * _frame.transform.localScale.y;
 
         return new Vector3(Random.Range(-boundX, boundX), Random.Range(-boundY, boundY));
     }
