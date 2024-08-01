@@ -5,9 +5,9 @@ using UnityEngine.UIElements;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private Frame _frame;
+    [SerializeField] private Ground _ground;
     [SerializeField] private Coin _coin;
-    [SerializeField] private float _rate;
+    [SerializeField] private float _delay;
     [SerializeField] private int _maxCount;
 
     private List<Coin> _coins = new List<Coin>();
@@ -20,9 +20,7 @@ public class Spawner : MonoBehaviour
 
     private IEnumerator Spawn()
     {
-        Debug.Log("Спавню");
-
-        var wait = new WaitForSeconds(_rate);
+        var wait = new WaitForSeconds(_delay);
 
         while (_coins.Count < _maxCount)
         {
@@ -30,26 +28,29 @@ public class Spawner : MonoBehaviour
 
             yield return wait;
         }
+
+        yield return null;
     }
 
     private Vector2 GetFreePlace()
     {
         Vector2 freePlaceCoordinate;
+
         do
         {
-            freePlaceCoordinate = ReturnRandomPosition();
+            freePlaceCoordinate = ReturnRandomPositionOnGround();
         }
         while (Physics2D.OverlapCircle(freePlaceCoordinate, 0.5f, 3));
 
         return freePlaceCoordinate;
     }
 
-    private Vector2 ReturnRandomPosition()
+    private Vector2 ReturnRandomPositionOnGround()
     {
         float scaleFactor = 0.5f;
 
-        float boundX = scaleFactor * _frame.transform.localScale.x;
-        float boundY = scaleFactor * _frame.transform.localScale.y;
+        float boundX = scaleFactor * _ground.transform.localScale.x;
+        float boundY = scaleFactor * _ground.transform.localScale.y;
 
         return new Vector2(Random.Range(-boundX, boundX), Random.Range(-boundY, boundY));
     }

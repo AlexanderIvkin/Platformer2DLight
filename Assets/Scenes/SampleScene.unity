@@ -779,7 +779,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3122362282990020359, guid: cf14544a830c6f7499d4609131f891e8, type: 3}
       propertyPath: m_Name
-      value: Frame
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 4295521590608265060, guid: cf14544a830c6f7499d4609131f891e8, type: 3}
       propertyPath: m_LocalPosition.x
