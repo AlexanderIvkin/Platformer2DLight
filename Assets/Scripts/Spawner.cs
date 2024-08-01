@@ -10,7 +10,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float _rate;
     [SerializeField] private int _maxCount;
 
-    private List<Coin> _coins;
+    private List<Coin> _coins = new List<Coin>();
 
 
     private void Start()
