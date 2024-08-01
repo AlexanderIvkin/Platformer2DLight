@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private Camera _camera;
     [SerializeField] private Frame _frame;
     [SerializeField] private Coin _coin;
     [SerializeField] private float _rate;
@@ -14,43 +13,44 @@ public class Spawner : MonoBehaviour
     private List<Coin> _coins;
 
 
-    private void Awake()
+    private void Start()
     {
         StartCoroutine(Spawn());
     }
 
     private IEnumerator Spawn()
     {
+        Debug.Log("Спавню");
+
         var wait = new WaitForSeconds(_rate);
 
         while (_coins.Count < _maxCount)
         {
-            if (TryGetFreePlace(out Vector2 spawnPosition))
-            {
-                Instantiate(_coin, spawnPosition, Quaternion.identity);
-            }
+            _coins.Add(Instantiate(_coin, GetFreePlace(), Quaternion.identity));
 
             yield return wait;
         }
     }
 
-    private bool TryGetFreePlace(out Vector2 freePlaceCoordinate)
+    private Vector2 GetFreePlace()
     {
-        bool isFinding = false;
-        freePlaceCoordinate = Vector2.zero;
+        Vector2 freePlaceCoordinate;
+        do
+        {
+            freePlaceCoordinate = ReturnRandomPosition();
+        }
+        while (Physics2D.OverlapCircle(freePlaceCoordinate, 0.5f, 3));
 
-        if (Physics2D.OverlapCircle(CalculateBackGroundSize(), 0.5f, 1, -100, 100) > 0) вот тут проблемка
-
-        return isFinding;
+        return freePlaceCoordinate;
     }
 
-    private Vector3 CalculateBackGroundSize()
+    private Vector2 ReturnRandomPosition()
     {
         float scaleFactor = 0.5f;
 
         float boundX = scaleFactor * _frame.transform.localScale.x;
         float boundY = scaleFactor * _frame.transform.localScale.y;
 
-        return new Vector3(Random.Range(-boundX, boundX), Random.Range(-boundY, boundY));
+        return new Vector2(Random.Range(-boundX, boundX), Random.Range(-boundY, boundY));
     }
 }
