@@ -94,7 +94,7 @@ ScriptedImporter:
     spritePosition: {x: 0, y: 0}
   mosaicSpriteImportData: []
   rigSpriteImportData:
-  - name: "\u0421\u043B\u043E\u0439 5"
+  - name: Frame
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -254,7 +254,7 @@ ScriptedImporter:
   documentAlignment: 7
   importHiddenLayers: 0
   layerMappingOption: 2
-  generatePhysicsShape: 0
+  generatePhysicsShape: 1
   paperDollMode: 0
   keepDupilcateSpriteName: 1
   skeletonAssetReferenceID: 
@@ -268,8 +268,8 @@ ScriptedImporter:
   resliceFromLayer: 1
   mosaicPSDLayers: []
   rigPSDLayers:
-  - name: "\u0421\u043B\u043E\u0439 5"
-    spriteName: "\u0421\u043B\u043E\u0439 5"
+  - name: Frame
+    spriteName: Frame
     isGroup: 0
     parentIndex: -1
     spriteID: ea8caf5ffdcffb24bb84db2b8706e559

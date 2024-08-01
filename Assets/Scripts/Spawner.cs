@@ -40,7 +40,7 @@ public class Spawner : MonoBehaviour
         {
             freePlaceCoordinate = ReturnRandomPositionOnGround();
         }
-        while (Physics2D.OverlapCircle(freePlaceCoordinate, 0.5f, 3));
+        while (Physics2D.OverlapCircle(freePlaceCoordinate, _coin.gameObject.transform.localScale.y, 3));
 
         return freePlaceCoordinate;
     }
@@ -49,8 +49,8 @@ public class Spawner : MonoBehaviour
     {
         float scaleFactor = 0.5f;
 
-        float boundX = scaleFactor * _ground.transform.localScale.x;
-        float boundY = scaleFactor * _ground.transform.localScale.y;
+        float boundX = scaleFactor * _ground.gameObject.transform.localScale.x;
+        float boundY = scaleFactor * _ground.gameObject.transform.localScale.y;
 
         return new Vector2(Random.Range(-boundX, boundX), Random.Range(-boundY, boundY));
     }
