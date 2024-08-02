@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private Ground _ground;
     [SerializeField] private Coin _coin;
     [SerializeField] private float _delay;
     [SerializeField] private int _maxCount;
@@ -45,11 +44,10 @@ public class Spawner : MonoBehaviour
 
     private Vector2 ReturnRandomPositionOnGround()
     {
-        float scaleFactor = 0.5f;
+        float boundX = 40f;
+        float downBoundY = 6.0f;
+        float upBoundY = 80.0f;
 
-        float boundX = scaleFactor * _ground.Width;
-        float boundY = scaleFactor * _ground.Height;
-
-        return new Vector2(Random.Range(-boundX, boundX), Random.Range(-boundY, boundY));
+        return new Vector2(Random.Range(-boundX, boundX), Random.Range(downBoundY, upBoundY));
     }
 }
