@@ -6,13 +6,13 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(InputScaner))]
+[RequireComponent(typeof(Stats))]
 
 public class Player : MonoBehaviour
 {
     private readonly int JumpTrigger = Animator.StringToHash("Jump");
     private readonly int UseTrigger = Animator.StringToHash("Attack");
     private readonly int DigTrigger = Animator.StringToHash("Dig");
-    private readonly int SitTrigger = Animator.StringToHash("Sit");
     private readonly string WalkAnimatorParameter = "Speed";
 
     [SerializeField] private TextMeshProUGUI _walletView;
@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     private Rigidbody2D _rigidbody2D;
     private Animator _animator;
     private InputScaner _inputScaner;
+    private Stats _stats;
     private Wallet _wallet = new Wallet();
 
     private void Awake()
@@ -30,8 +31,8 @@ public class Player : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _inputScaner = GetComponent<InputScaner>();
+        _stats = GetComponent<Stats>();
         _wallet.SetTextMeshProUGUI(_walletView);
-
     }
 
     private void OnEnable()
@@ -40,7 +41,6 @@ public class Player : MonoBehaviour
         _inputScaner.Moved += Move;
         _inputScaner.Attacked += Use;
         _inputScaner.Digging += Dig;
-        _inputScaner.Sitting += Sit;
     }
 
     private void OnDisable()
@@ -49,7 +49,6 @@ public class Player : MonoBehaviour
         _inputScaner.Moved -= Move;
         _inputScaner.Attacked -= Use;
         _inputScaner.Digging -= Dig;
-        _inputScaner.Sitting -= Sit;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -118,11 +117,5 @@ public class Player : MonoBehaviour
     private void Dig()
     {
         _animator.SetTrigger(DigTrigger);
-    }
-
-    private void Sit()
-    {
-        Debug.Log("Сидим");
-        _animator.SetTrigger(SitTrigger);
     }
 }

@@ -7,7 +7,9 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] private Coin _coin;
     [SerializeField] private float _delay;
+    [SerializeField] private float _coinRadius;
     [SerializeField] private int _maxCount;
+    [SerializeField] private int _searchingLayerNumber;
 
     private List<Coin> _coins = new List<Coin>();
 
@@ -33,11 +35,12 @@ public class Spawner : MonoBehaviour
     {
         Vector2 freePlaceCoordinate;
 
+
         do
         {
             freePlaceCoordinate = ReturnRandomPositionOnGround();
         }
-        while (Physics2D.OverlapCircle(freePlaceCoordinate, _coin.gameObject.transform.localScale.y, 3));
+        while (Physics2D.OverlapCircle(freePlaceCoordinate, _coinRadius, _searchingLayerNumber));
 
         return freePlaceCoordinate;
     }

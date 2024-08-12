@@ -11,13 +11,10 @@ public class InputScaner : MonoBehaviour
     public event Action Jumped;
     public event Action Attacked;
     public event Action Digging;
-    public event Action Sitting;
 
     private KeyCode _jumpButton = KeyCode.Space;
     private KeyCode _digButton = KeyCode.Q;
-    private KeyCode _sitButton = KeyCode.LeftControl;
     private KeyCode _useButton = KeyCode.E;
-    private Dictionary<KeyCode, Action> _keyBase;
 
     private void Update()
     {
@@ -25,7 +22,6 @@ public class InputScaner : MonoBehaviour
         ReadMoveButton();
         ReadUseButton();
         ReadDigButton();
-        ReadSitButton();
     }
 
     private void ReadJumpButton()
@@ -59,14 +55,6 @@ public class InputScaner : MonoBehaviour
         if (Input.GetKeyDown(_digButton))
         {
             Digging?.Invoke();
-        }
-    }
-
-    private void ReadSitButton()
-    {
-        if (Input.GetKeyDown(_sitButton))
-        {
-            Sitting?.Invoke();
         }
     }
 }

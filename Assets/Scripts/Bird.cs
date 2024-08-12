@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Vision))]
+[RequireComponent(typeof(Stats))]
 
 public class Bird : MonoBehaviour
 {
@@ -25,8 +26,9 @@ public class Bird : MonoBehaviour
     private Vision _vision;
     private Rigidbody2D _rigidBody;
     private Animator _animator;
+    private Stats _stats;
 
-    private float ReturnTimeOfAction => GetRandomValue(1, 2);
+    private float ReturnTimeOfAction => GetRandomValue(1, _timeToAction);
 
     private void Awake()
     {
@@ -60,11 +62,6 @@ public class Bird : MonoBehaviour
         if (collision.gameObject.TryGetComponent<Ground>(out _))
         {
             _isGrounded = true;
-        }
-
-        if (collision.gameObject.TryGetComponent<Player>(out _))
-        {
-            StartCoroutine(Death());
         }
     }
 
@@ -128,11 +125,10 @@ public class Bird : MonoBehaviour
 
     private void Runaway(Transform target)
     {
-        Debug.Log("–¿Õ›¬›…");
-
-        if (target.gameObject.TryGetComponent<Player>(out _))
+        if (target.TryGetComponent<Player>(out _))
         {
-            Debug.Log("√ÓÚÓ‚ËÏ ‡Ú‡ÍÛ");
+        Debug.Log("¬»»»»∆∆∆∆”");
+
 
             float attackDistance = 0.2f;
 
