@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InputScaner : MonoBehaviour
@@ -9,18 +7,15 @@ public class InputScaner : MonoBehaviour
 
     public event Action<float> Moved;
     public event Action Jumped;
-    public event Action Attacked;
     public event Action Digging;
 
     private KeyCode _jumpButton = KeyCode.Space;
     private KeyCode _digButton = KeyCode.Q;
-    private KeyCode _useButton = KeyCode.E;
 
     private void Update()
     {
         ReadJumpButton();
         ReadMoveButton();
-        ReadUseButton();
         ReadDigButton();
     }
 
@@ -39,14 +34,6 @@ public class InputScaner : MonoBehaviour
         if (direction != 0)
         {
             Moved?.Invoke(Input.GetAxis(Horizontal));
-        }
-    }
-
-    private void ReadUseButton()
-    {
-        if (Input.GetKeyDown(_useButton))
-        {
-            Attacked?.Invoke();
         }
     }
 

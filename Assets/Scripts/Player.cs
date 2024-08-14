@@ -6,12 +6,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(InputScaner))]
-[RequireComponent(typeof(Stats))]
 
-public class Player : MonoBehaviour
+public class Player : Character
 {
     private readonly int JumpTrigger = Animator.StringToHash("Jump");
-    private readonly int UseTrigger = Animator.StringToHash("Attack");
     private readonly int DigTrigger = Animator.StringToHash("Dig");
     private readonly string WalkAnimatorParameter = "Speed";
 
@@ -21,17 +19,14 @@ public class Player : MonoBehaviour
     [SerializeField] private bool _isGrounded;
 
     private Rigidbody2D _rigidbody2D;
-    private Animator _animator;
     private InputScaner _inputScaner;
-    private Stats _stats;
     private Wallet _wallet = new Wallet();
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _animator = GetComponent<Animator>();
+        Animator = GetComponent<Animator>();
         _inputScaner = GetComponent<InputScaner>();
-        _stats = GetComponent<Stats>();
         _wallet.SetTextMeshProUGUI(_walletView);
     }
 
@@ -39,7 +34,6 @@ public class Player : MonoBehaviour
     {
         _inputScaner.Jumped += Jump;
         _inputScaner.Moved += Move;
-        _inputScaner.Attacked += Use;
         _inputScaner.Digging += Dig;
     }
 
@@ -47,7 +41,6 @@ public class Player : MonoBehaviour
     {
         _inputScaner.Jumped -= Jump;
         _inputScaner.Moved -= Move;
-        _inputScaner.Attacked -= Use;
         _inputScaner.Digging -= Dig;
     }
 
@@ -80,11 +73,12 @@ public class Player : MonoBehaviour
     private void Move(float direction)
     {
         Flip(direction);
+
         transform.Translate(_speed * direction * Time.deltaTime * Vector2.right);
 
         if (_isGrounded)
         {
-            _animator.SetFloat(WalkAnimatorParameter, Mathf.Abs(direction));
+            Animator.SetFloat(WalkAnimatorParameter, Mathf.Abs(direction));
         }
     }
 
@@ -104,18 +98,13 @@ public class Player : MonoBehaviour
     {
         if (_isGrounded)
         {
-            _animator.SetTrigger(JumpTrigger);
+            Animator.SetTrigger(JumpTrigger);
             _rigidbody2D.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
         }
     }
 
-    private void Use()
-    {
-        _animator.SetTrigger(UseTrigger);
-    }
-
     private void Dig()
     {
-        _animator.SetTrigger(DigTrigger);
+        Animator.SetTrigger(DigTrigger);
     }
 }

@@ -1,23 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Vision))]
-[RequireComponent(typeof(Stats))]
 
-public class Bird : MonoBehaviour
+public class Bird : Character
 {
     private readonly int EatTrigger = Animator.StringToHash("Eat");
     private readonly int FlyTrigger = Animator.StringToHash("Fly");
     private readonly int IDLETrigger = Animator.StringToHash("IDLE");
-    private readonly int DeathTrigger = Animator.StringToHash("Death");
-    private readonly int AttackTrigger = Animator.StringToHash("Attack");
 
     [SerializeField] private float _jumpForce;
+    [SerializeField] private float _speed;
 
-    [SerializeField] private float _timeToAction;
+    [SerializeField] private float _maxTimeToAction;
+    [SerializeField] private float _attackDistance;
     [SerializeField] private bool _isGrounded;
     [SerializeField] private bool _isAlive;
     [SerializeField] private bool _isFree;
@@ -26,21 +27,20 @@ public class Bird : MonoBehaviour
     private Vision _vision;
     private Rigidbody2D _rigidBody;
     private Animator _animator;
-    private Stats _stats;
 
-    private float ReturnTimeOfAction => GetRandomValue(1, _timeToAction);
+    private float ReturnTimeOfAction => GetRandomValue(0f, _maxTimeToAction);
 
     private void Awake()
     {
-        _rigidBody = GetComponent<Rigidbody2D>();
-        _animator = GetComponent<Animator>();
-        _vision = GetComponent<Vision>();
-
         Init();
     }
 
     private void Init()
     {
+        _rigidBody = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
+        _vision = GetComponent<Vision>();
+
         _isAlive = true;
         _isFree = true;
         _isSafely = true;
@@ -48,12 +48,12 @@ public class Bird : MonoBehaviour
 
     private void OnEnable()
     {
-        _vision.Viewed += Runaway;
+        _vision.Viewed += PrepareToFight;
     }
 
     private void OnDisable()
     {
-        _vision.Viewed -= Runaway;
+        _vision.Viewed -= PrepareToFight;
 
     }
 
@@ -78,6 +78,12 @@ public class Bird : MonoBehaviour
         StartCoroutine(Behaviour());
     }
 
+    private enum Coroutines
+    {
+        Idle,
+        Fly,
+    }
+
     private IEnumerator Behaviour()
     {
         var wait = new WaitForSeconds(ReturnTimeOfAction);
@@ -96,7 +102,7 @@ public class Bird : MonoBehaviour
             }
             else
             {
-                StartCoroutine(Idle(ReturnTimeOfAction));
+                StartCoroutine(Idle());
             }
 
             yield return wait;
@@ -110,11 +116,11 @@ public class Bird : MonoBehaviour
         return direction;
     }
 
-    private IEnumerator Idle(float time)
+    private IEnumerator Idle()
     {
         Debug.Log("»ƒÀ≈");
 
-        var wait = new WaitForSeconds(time);
+        var wait = new WaitForSeconds(GetRandomValue(0, _maxTimeToAction));
 
         _isFree = true;
 
@@ -123,43 +129,30 @@ public class Bird : MonoBehaviour
         yield return wait;
     }
 
-    private void Runaway(Transform target)
+    private void PrepareToFight(Transform target)
     {
         if (target.TryGetComponent<Player>(out _))
         {
-        Debug.Log("¬»»»»∆∆∆∆”");
+            float currentDistance = transform.position.x - target.position.x;
 
-
-            float attackDistance = 0.2f;
-
-            _isFree = false;
-            _isSafely = true;
-
-            Vector2 direction = target.transform.position - transform.position;
-
-            transform.LookAt(target);
-            _rigidBody.AddForce(direction.normalized * _jumpForce, ForceMode2D.Impulse);
-            _animator.SetTrigger(FlyTrigger);
-
-            if (transform.position.x > target.position.x - attackDistance)
+            do
             {
-                StartCoroutine(Fight(target));
-            }
+                _isFree = false;
+
+                Vector2 attackPosition = new Vector2(target.position.x - _attackDistance, target.position.y);
+
+                transform.position = Vector2.MoveTowards(transform.position, attackPosition, _speed * Time.deltaTime);
+
+                _animator.SetTrigger(FlyTrigger);
+
+            } while (currentDistance >= _attackDistance);
+
         }
-    }
-
-    private IEnumerator Fight(Transform target)
-    {
-        Debug.Log("ƒ–¿ ¿");
-
-        _animator.SetTrigger(AttackTrigger);
-
-        yield return null;
     }
 
     private IEnumerator Eat()
     {
-        var wait = new WaitForSeconds(ReturnTimeOfAction);
+        var wait = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
 
         Debug.Log("∆–ŒŒŒ“‹ “””””");
 
@@ -170,6 +163,11 @@ public class Bird : MonoBehaviour
         yield return wait;
 
         StopCoroutine(Eat());
+    }
+
+    private float GetRandomPositiveNumber(float max)
+    {
+        return Random.Range(0, max);
     }
 
     private float GetRandomValue(float min, float max)
