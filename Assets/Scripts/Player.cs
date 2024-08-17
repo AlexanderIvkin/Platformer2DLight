@@ -51,18 +51,7 @@ public class Player : Character
             _wallet.Add();
         }
 
-        if (collision.gameObject.TryGetComponent<Ground>(out _))
-        {
-            _isGrounded = true;
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.TryGetComponent<Ground>(out _))
-        {
-            _isGrounded = false;
-        }
+        
     }
 
     private void Update()
@@ -79,18 +68,6 @@ public class Player : Character
         if (_isGrounded)
         {
             Animator.SetFloat(WalkAnimatorParameter, Mathf.Abs(direction));
-        }
-    }
-
-    private void Flip(float direction)
-    {
-        float scaleFactor = -1f;
-        bool rightOriented = direction <= 0;
-
-        transform.localScale = new Vector3(Mathf.Sign(scaleFactor * direction), transform.localScale.y, transform.localScale.z);
-
-        if (transform.localScale.x == 0) { 
-        
         }
     }
 

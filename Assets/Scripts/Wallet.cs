@@ -2,7 +2,6 @@ using TMPro;
 
 public class Wallet
 {
-
     private TextMeshProUGUI _textView;
     private int _value = 0;
 

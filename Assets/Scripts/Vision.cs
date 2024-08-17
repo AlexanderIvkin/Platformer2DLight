@@ -1,4 +1,5 @@
 using System;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class Vision : MonoBehaviour
@@ -8,20 +9,11 @@ public class Vision : MonoBehaviour
     [SerializeField] private float _viewDistance;
     [SerializeField] private Transform _eyePosition;
 
-    private void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        MakeView();
-    }
-
-    private void MakeView()
-    {
-        RaycastHit2D hit = Physics2D.Raycast(_eyePosition.position , Vector2.right, _viewDistance);
-
-
-        if (hit.collider != null)
+        if (collision != null )
         {
-            Viewed?.Invoke(hit.transform);
-            Debug.Log("Событие вызвалось");
+            Viewed?.Invoke(collision.transform);
         }
     }
 }

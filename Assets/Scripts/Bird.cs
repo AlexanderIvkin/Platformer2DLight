@@ -14,15 +14,13 @@ public class Bird : Character
     private readonly int FlyTrigger = Animator.StringToHash("Fly");
     private readonly int IDLETrigger = Animator.StringToHash("IDLE");
 
-    [SerializeField] private float _jumpForce;
+    [SerializeField] private float _minJumpForce;
+    [SerializeField] private float _maxJumpForce;
     [SerializeField] private float _speed;
 
     [SerializeField] private float _maxTimeToAction;
     [SerializeField] private float _attackDistance;
     [SerializeField] private bool _isGrounded;
-    [SerializeField] private bool _isAlive;
-    [SerializeField] private bool _isFree;
-    [SerializeField] private bool _isSafely;
 
     private Vision _vision;
     private Rigidbody2D _rigidBody;
@@ -41,9 +39,6 @@ public class Bird : Character
         _animator = GetComponent<Animator>();
         _vision = GetComponent<Vision>();
 
-        _isAlive = true;
-        _isFree = true;
-        _isSafely = true;
     }
 
     private void OnEnable()
@@ -88,21 +83,27 @@ public class Bird : Character
     {
         var wait = new WaitForSeconds(ReturnTimeOfAction);
 
-        while (_isAlive)
+        while (IsAlive)
         {
-            if (_isFree)
+            if (IsGrounded)
             {
-                if (_isSafely)
+                float maxChance = 1f;
+                float searchChance = 0.6f;
+                float eatChance = 0.2f;
+                float currentChance = GetRandomPositiveNumber(maxChance);
+
+                if (currentChance > searchChance)
                 {
-                    if (_isGrounded)
-                    {
-                        StartCoroutine(Eat());
-                    }
+                    StartCoroutine(Search());
                 }
-            }
-            else
-            {
-                StartCoroutine(Idle());
+                else if (currentChance > eatChance)
+                {
+                    StartCoroutine(Eat());
+                }
+                else
+                {
+                    StartCoroutine(Idle());
+                }
             }
 
             yield return wait;
@@ -111,18 +112,14 @@ public class Bird : Character
 
     private Vector2 GetRandomDirection()
     {
-        Vector2 direction = new Vector2(GetRandomValue(-1, 1), GetRandomValue(0, 1));
+        Vector2 direction = new Vector2(GetRandomValue(-1, 1), GetRandomPositiveNumber(1));
 
         return direction;
     }
 
     private IEnumerator Idle()
     {
-        Debug.Log("»ƒÀ≈");
-
         var wait = new WaitForSeconds(GetRandomValue(0, _maxTimeToAction));
-
-        _isFree = true;
 
         _animator.SetTrigger(IDLETrigger);
 
@@ -137,7 +134,6 @@ public class Bird : Character
 
             do
             {
-                _isFree = false;
 
                 Vector2 attackPosition = new Vector2(target.position.x - _attackDistance, target.position.y);
 
@@ -146,17 +142,12 @@ public class Bird : Character
                 _animator.SetTrigger(FlyTrigger);
 
             } while (currentDistance >= _attackDistance);
-
         }
     }
 
     private IEnumerator Eat()
     {
         var wait = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
-
-        Debug.Log("∆–ŒŒŒ“‹ “””””");
-
-        _isFree = false;
 
         _animator.SetTrigger(EatTrigger);
 
@@ -175,28 +166,29 @@ public class Bird : Character
         return Random.Range(min, max);
     }
 
-    private IEnumerator Fly()
+    private IEnumerator Search()
     {
-        Debug.Log("œÓÎ∏Ú");
-        var wait = new WaitForSeconds(ReturnTimeOfAction);
+        var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
+        var waitEndFrame = new WaitForEndOfFrame();
 
-        _isFree = false;
+        Vector2 direction = GetRandomDirection();
 
-        _animator.SetTrigger(FlyTrigger);
+        Flip(direction.x);
 
-        yield return null;
-    }
+        _rigidBody.AddForce(direction * GetRandomValue(_minJumpForce, _maxJumpForce), ForceMode2D.Impulse);
 
-    private IEnumerator Death()
-    {
-        Debug.Log("—ÏÂÚ¸");
+        do
+        {
+            _animator.SetTrigger(FlyTrigger);
 
-        _isAlive = false;
+            yield return waitEndFrame;
 
-        _animator.SetBool("IsAlive", _isAlive);
+        } while (!_isGrounded);
 
-        StopAllCoroutines();
+        _animator.SetTrigger(IDLETrigger);
 
-        yield return null;
+        yield return waitSeconds;
+
+        StopCoroutine(Search());
     }
 }

@@ -13,7 +13,6 @@ public class Spawner : MonoBehaviour
 
     private List<Coin> _coins = new List<Coin>();
 
-
     private void Start()
     {
         StartCoroutine(Spawn());
@@ -34,7 +33,6 @@ public class Spawner : MonoBehaviour
     private Vector2 GetFreePlace()
     {
         Vector2 freePlaceCoordinate;
-
 
         do
         {
