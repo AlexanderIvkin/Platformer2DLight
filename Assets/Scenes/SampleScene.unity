@@ -122,6 +122,34 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &805954563 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 121049407653312799, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
+  m_PrefabInstance: {fileID: 947731885900501676}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &805954570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805954563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1c2d5469f134f341aa1991814a65ab9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 10
+  _damage: 1
+  _attackPerSecond: 3
+  _jumpForce: 3
+  _speed: 6
+  _maxTimeToAction: 7
+  _attackDistance: 7
+  _isGrounded: 0
+  _isAlive: 1
+  _isFree: 1
+  _isSafely: 1
 --- !u!20 &943502976 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 6727498759506346294, guid: 38939a8f61b368747a02cb575ed2e633, type: 3}
@@ -405,7 +433,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -1075,7 +1103,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6049136748750076685, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
       propertyPath: _speed
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6049136748750076685, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
       propertyPath: _damage
@@ -1097,11 +1125,19 @@ PrefabInstance:
       propertyPath: _damagePerSecond
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6049136748750076685, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
+      propertyPath: _maxTimeToAction
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7357986542739872868, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
+    - {fileID: 6049136748750076685, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 121049407653312799, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 805954570}
   m_SourcePrefab: {fileID: 100100000, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
 --- !u!1001 &1346489673434675620
 PrefabInstance:

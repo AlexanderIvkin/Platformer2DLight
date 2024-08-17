@@ -14,9 +14,8 @@ public abstract class Character : MonoBehaviour
     [SerializeField] private int _damage;
     [SerializeField] private int _attackPerSecond;
 
-    private Character targetCharacter;
-
     private Health _health;
+    private bool _isFight;
 
     protected Animator Animator;
 
@@ -36,13 +35,34 @@ public abstract class Character : MonoBehaviour
     {
         _health.Dead -= ToDie;
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        StartCoroutine(Attack(collision));
+        if (collision.gameObject.TryGetComponent<Character>(out Character target))
+        {
+            StartCoroutine(Attack(target));
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (_isFight)
+        {
+            if (collision.gameObject.TryGetComponent<Character>(out Character target))
+            {
+                StopCoroutine(Attack(target));
+
+                _isFight = false;
+            }
+        }
     }
 
     protected IEnumerator Attack(Character target)
     {
+        Debug.Log("¿“¿ ”ﬁ");
+
+        _isFight= true;
+
         float speedFactor = 1 / _attackPerSecond;
 
         var wait = new WaitForSeconds(speedFactor);

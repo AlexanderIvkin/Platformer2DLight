@@ -146,7 +146,6 @@ public class Bird : Character
                 _animator.SetTrigger(FlyTrigger);
 
             } while (currentDistance >= _attackDistance);
-
         }
     }
 
