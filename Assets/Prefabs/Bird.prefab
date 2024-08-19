@@ -282,12 +282,12 @@ MonoBehaviour:
   _maxHealth: 10
   _damage: 1
   _attackPerSecond: 3
+  _scaleFactor: 1
   _minJumpForce: 4
   _maxJumpForce: 10
   _speed: 6
   _maxTimeToAction: 4
   _attackDistance: 7
-  _isGrounded: 0
 --- !u!114 &454896055699623548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,4 +301,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _viewDistance: 6
-  _eyePosition: {fileID: 2045464786357613299}

@@ -16,7 +16,6 @@ public class Player : Character
     [SerializeField] private TextMeshProUGUI _walletView;
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpForce;
-    [SerializeField] private bool _isGrounded;
 
     private Rigidbody2D _rigidbody2D;
     private InputScaner _inputScaner;
@@ -50,8 +49,6 @@ public class Player : Character
         {
             _wallet.Add();
         }
-
-        
     }
 
     private void Update()
@@ -61,19 +58,19 @@ public class Player : Character
 
     private void Move(float direction)
     {
-        Flip(direction);
 
-        transform.Translate(_speed * direction * Time.deltaTime * Vector2.right);
 
-        if (_isGrounded)
+        if (IsGrounded)
         {
+        Flip(direction);
+        transform.Translate(_speed * direction * Time.deltaTime * Vector2.right);
             Animator.SetFloat(WalkAnimatorParameter, Mathf.Abs(direction));
         }
     }
 
     private void Jump()
     {
-        if (_isGrounded)
+        if (IsGrounded)
         {
             Animator.SetTrigger(JumpTrigger);
             _rigidbody2D.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);

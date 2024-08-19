@@ -20,7 +20,6 @@ public class Bird : Character
 
     [SerializeField] private float _maxTimeToAction;
     [SerializeField] private float _attackDistance;
-    [SerializeField] private bool _isGrounded;
 
     private Vision _vision;
     private Rigidbody2D _rigidBody;
@@ -52,31 +51,9 @@ public class Bird : Character
 
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.TryGetComponent<Ground>(out _))
-        {
-            _isGrounded = true;
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.TryGetComponent<Ground>(out _))
-        {
-            _isGrounded = false;
-        }
-    }
-
     private void Start()
     {
         StartCoroutine(Behaviour());
-    }
-
-    private enum Coroutines
-    {
-        Idle,
-        Fly,
     }
 
     private IEnumerator Behaviour()
@@ -119,22 +96,23 @@ public class Bird : Character
 
     private IEnumerator Idle()
     {
-        var wait = new WaitForSeconds(GetRandomValue(0, _maxTimeToAction));
+        var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
 
         _animator.SetTrigger(IDLETrigger);
 
-        yield return wait;
+        yield return waitSeconds;
+
+        yield break;
     }
 
     private void PrepareToFight(Transform target)
     {
-        if (target.TryGetComponent<Player>(out _))
+        if (target.gameObject.TryGetComponent<Player>(out _))
         {
             float currentDistance = transform.position.x - target.position.x;
 
             do
             {
-
                 Vector2 attackPosition = new Vector2(target.position.x - _attackDistance, target.position.y);
 
                 transform.position = Vector2.MoveTowards(transform.position, attackPosition, _speed * Time.deltaTime);
@@ -147,13 +125,11 @@ public class Bird : Character
 
     private IEnumerator Eat()
     {
-        var wait = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
+        var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
 
         _animator.SetTrigger(EatTrigger);
 
-        yield return wait;
-
-        StopCoroutine(Eat());
+        yield return waitSeconds;
     }
 
     private float GetRandomPositiveNumber(float max)
@@ -183,12 +159,12 @@ public class Bird : Character
 
             yield return waitEndFrame;
 
-        } while (!_isGrounded);
+        } while (!IsGrounded);
 
         _animator.SetTrigger(IDLETrigger);
 
         yield return waitSeconds;
 
-        StopCoroutine(Search());
+        yield break;
     }
 }

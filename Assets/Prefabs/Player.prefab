@@ -134,11 +134,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 0cba47e2b7119c045a05a184c875d204, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -20.5
+      value: -3.1
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 0cba47e2b7119c045a05a184c875d204, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 25.4
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 0cba47e2b7119c045a05a184c875d204, type: 3}
       propertyPath: m_LocalPosition.z
@@ -337,13 +337,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75190b397aa4cb478f99f56766a6ef5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 0
-  _damage: 0
-  _damagePerSecond: 0
+  _maxHealth: 30
+  _damage: 2
+  _attackPerSecond: 2
+  _scaleFactor: 0
   _walletView: {fileID: 0}
   _speed: 10
   _jumpForce: 30
-  _isGrounded: 0
 --- !u!114 &8674054916228892453
 MonoBehaviour:
   m_ObjectHideFlags: 0

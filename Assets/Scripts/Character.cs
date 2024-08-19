@@ -12,15 +12,16 @@ public abstract class Character : MonoBehaviour
     [SerializeField] private int _maxHealth;
     [SerializeField] private int _damage;
     [SerializeField] private int _attackPerSecond;
-    [SerializeField]private Health _health;
+    [SerializeField] private Health _health;
+    [SerializeField] private float _scaleFactor;
 
-    private bool _isFight;
 
-    protected bool IsGrounded;
 
+    public bool IsGrounded { get; private set; }
+    protected bool IsWorks;
+    protected bool IsAlive;
     protected Animator Animator;
 
-    public bool IsAlive { get; private set; }
 
     private void Awake()
     {
@@ -50,38 +51,28 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    protected void OnCollisionExit2D(Collision2D collision)
     {
-        
-
-
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (_isFight)
+        if (collision.gameObject.TryGetComponent<Ground>(out _))
         {
-            if (collision.gameObject.TryGetComponent<Character>(out Character target))
-            {
-                StopCoroutine(Attack(target));
+            IsGrounded = false;
+        }
 
-                _isFight = false;
-            }
+        if (collision.gameObject.TryGetComponent<Character>(out Character target))
+        {
+            StopCoroutine(Attack(target));
         }
     }
 
     protected IEnumerator Attack(Character target)
     {
-        Debug.Log("¿“¿ ”ﬁ");
-
-        _isFight = true;
-
         float speedFactor = 1 / _attackPerSecond;
 
         var wait = new WaitForSeconds(speedFactor);
 
         while (target != null && target.IsAlive)
         {
+            Debug.Log("¿“¿ ”ﬁ");
             _health.TryRemove(target._damage);
 
             Animator.SetTrigger(AttackTrigger);
@@ -89,13 +80,14 @@ public abstract class Character : MonoBehaviour
             yield return wait;
         }
 
-        yield break;
     }
 
     private void Init()
     {
         _health = new Health(_maxHealth);
         IsAlive = true;
+        IsWorks = false;
+        IsGrounded = false;
         Animator = GetComponent<Animator>();
     }
 
@@ -107,8 +99,6 @@ public abstract class Character : MonoBehaviour
 
     protected void Flip(float direction)
     {
-        float scaleFactor = -1f;
-
-        transform.localScale = new Vector3(Mathf.Sign(scaleFactor * direction), transform.localScale.y, transform.localScale.z);
+        transform.localScale = new Vector3(Mathf.Sign(_scaleFactor * direction), transform.localScale.y, transform.localScale.z);
     }
 }
