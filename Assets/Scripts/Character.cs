@@ -15,7 +15,8 @@ public abstract class Character : MonoBehaviour
     [SerializeField] private Health _health;
     [SerializeField] private float _scaleFactor;
 
-
+    private Health _health;
+    private bool _isFight;
 
     public bool IsGrounded { get; private set; }
     protected bool IsWorks;
@@ -40,32 +41,15 @@ public abstract class Character : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.TryGetComponent<Ground>(out _))
-        {
-            IsGrounded = true;
-        }
-
-        if (collision.gameObject.TryGetComponent<Character>(out Character target))
-        {
-            StartCoroutine(Attack(target));
-        }
-    }
-
-    protected void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.TryGetComponent<Ground>(out _))
-        {
-            IsGrounded = false;
-        }
-
-        if (collision.gameObject.TryGetComponent<Character>(out Character target))
-        {
-            StopCoroutine(Attack(target));
-        }
+        StartCoroutine(Attack(collision));
     }
 
     protected IEnumerator Attack(Character target)
     {
+        Debug.Log("¿“¿ ”ﬁ");
+
+        _isFight= true;
+
         float speedFactor = 1 / _attackPerSecond;
 
         var wait = new WaitForSeconds(speedFactor);
