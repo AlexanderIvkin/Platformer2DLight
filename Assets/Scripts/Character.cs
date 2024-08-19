@@ -43,6 +43,11 @@ public abstract class Character : MonoBehaviour
         {
             IsGrounded = true;
         }
+
+        if (collision.gameObject.TryGetComponent<Character>(out Character target))
+        {
+            StartCoroutine(Attack(target));
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -51,11 +56,16 @@ public abstract class Character : MonoBehaviour
         {
             IsGrounded = false;
         }
+
+        if (collision.gameObject.TryGetComponent<Character>(out Character target))
+        {
+            StopCoroutine(Attack(target));
+        }
     }
 
     protected IEnumerator Attack(Character target)
     {
-        Debug.Log("АТАКУЮ");
+        Debug.Log("Начинаю атаку");
 
         float speedFactor = 1 / _attackPerSecond;
 
