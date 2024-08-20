@@ -16,7 +16,7 @@ public abstract class Character : MonoBehaviour
 
     private Health _health;
 
-    public bool IsGrounded { get; private set; }
+    protected bool IsGrounded;
     protected bool IsWorks;
     protected bool IsAlive;
     protected Animator Animator;
@@ -37,13 +37,23 @@ public abstract class Character : MonoBehaviour
         _health.Dead -= ToDie;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    {
+        GroundCheck(collision);
+
+        TargetCheck(collision);
+    }
+
+    private void GroundCheck (Collision2D collision)
     {
         if (collision.gameObject.TryGetComponent<Ground>(out _))
         {
             IsGrounded = true;
         }
+    }
 
+    private void TargetCheck(Collision2D collision)
+    {
         if (collision.gameObject.TryGetComponent<Character>(out Character target))
         {
             StartCoroutine(Attack(target));

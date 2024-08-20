@@ -43,8 +43,10 @@ public class Player : Character
         _inputScaner.Digging -= Dig;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected override void OnCollisionEnter2D(Collision2D collision)
     {
+        base.OnCollisionEnter2D(collision);
+
         if (collision.gameObject.TryGetComponent<Coin>(out _))
         {
             _wallet.Add();
@@ -58,12 +60,11 @@ public class Player : Character
 
     private void Move(float direction)
     {
-
+        Flip(direction);
+        transform.Translate(_speed * direction * Time.deltaTime * Vector2.right);
 
         if (IsGrounded)
         {
-        Flip(direction);
-        transform.Translate(_speed * direction * Time.deltaTime * Vector2.right);
             Animator.SetFloat(WalkAnimatorParameter, Mathf.Abs(direction));
         }
     }

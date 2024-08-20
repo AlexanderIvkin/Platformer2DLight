@@ -24,6 +24,7 @@ public class Bird : Character
     private Vision _vision;
     private Rigidbody2D _rigidBody;
     private Animator _animator;
+    private bool _isFree;
 
     private float ReturnTimeOfAction => GetRandomValue(0f, _maxTimeToAction);
 
@@ -37,7 +38,7 @@ public class Bird : Character
         _rigidBody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _vision = GetComponent<Vision>();
-
+        _isFree = true;
     }
 
     private void OnEnable()
@@ -64,22 +65,25 @@ public class Bird : Character
         {
             if (IsGrounded)
             {
-                float maxChance = 1f;
-                float searchChance = 0.6f;
-                float eatChance = 0.2f;
-                float currentChance = GetRandomPositiveNumber(maxChance);
+                if (_isFree)
+                {
+                    float maxChance = 1f;
+                    float searchChance = 0.7f;
+                    float eatChance = 0.3f;
+                    float currentChance = GetRandomPositiveNumber(maxChance);
 
-                if (currentChance > searchChance)
-                {
-                    StartCoroutine(Search());
-                }
-                else if (currentChance > eatChance)
-                {
-                    StartCoroutine(Eat());
-                }
-                else
-                {
-                    StartCoroutine(Idle());
+                    if (currentChance > searchChance)
+                    {
+                        StartCoroutine(Search());
+                    }
+                    else if (currentChance > eatChance)
+                    {
+                        StartCoroutine(Eat());
+                    }
+                    else
+                    {
+                        StartCoroutine(Idle());
+                    }
                 }
             }
 
@@ -96,11 +100,19 @@ public class Bird : Character
 
     private IEnumerator Idle()
     {
+
         var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
 
-        _animator.SetTrigger(IDLETrigger);
+        while (_isFree)
+        {
+            _animator.SetTrigger(IDLETrigger);
 
-        yield return waitSeconds;
+            yield return waitSeconds;
+
+            _isFree = false;
+        }
+
+        _isFree = true;
 
         yield break;
     }
@@ -127,9 +139,18 @@ public class Bird : Character
     {
         var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
 
-        _animator.SetTrigger(EatTrigger);
+        while (_isFree)
+        {
+            _animator.SetTrigger(EatTrigger);
 
-        yield return waitSeconds;
+            yield return waitSeconds;
+
+            _isFree = false;
+        }
+
+        _isFree = true;
+
+        yield break;
     }
 
     private float GetRandomPositiveNumber(float max)
@@ -153,17 +174,24 @@ public class Bird : Character
 
         _rigidBody.AddForce(direction * GetRandomValue(_minJumpForce, _maxJumpForce), ForceMode2D.Impulse);
 
-        do
+        while (_isFree)
         {
-            _animator.SetTrigger(FlyTrigger);
+            do
+            {
+                _animator.SetTrigger(FlyTrigger);
 
-            yield return waitEndFrame;
+                yield return waitEndFrame;
 
-        } while (!IsGrounded);
+            } while (!IsGrounded);
 
-        _animator.SetTrigger(IDLETrigger);
+            _animator.SetTrigger(IDLETrigger);
 
-        yield return waitSeconds;
+            yield return waitSeconds;
+
+            _isFree = false;
+        }
+
+        _isFree = true;
 
         yield break;
     }
