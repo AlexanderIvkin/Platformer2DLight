@@ -69,6 +69,7 @@ public class Bird : Character
             if (IsGrounded)
             {
                 Debug.Log("На земле");
+
                 if (_isFree)
                 {
                     Debug.Log("Свободен");
