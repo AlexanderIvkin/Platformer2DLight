@@ -21,8 +21,10 @@ public class Player : Character
     private InputScaner _inputScaner;
     private Wallet _wallet = new Wallet();
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         _rigidbody2D = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
         _inputScaner = GetComponent<InputScaner>();
@@ -81,5 +83,14 @@ public class Player : Character
     private void Dig()
     {
         Animator.SetTrigger(DigTrigger);
+    }
+
+    protected override void ToDie()
+    {
+
+        base.ToDie();
+
+        _rigidbody2D.velocity = Vector2.zero;
+        _rigidbody2D.mass = 500;
     }
 }

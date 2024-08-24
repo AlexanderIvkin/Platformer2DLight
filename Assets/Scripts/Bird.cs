@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(Vision))]
+[RequireComponent(typeof(PlayerScanner))]
 
 public class Bird : Character
 {
@@ -21,15 +21,17 @@ public class Bird : Character
     [SerializeField] private float _maxTimeToAction;
     [SerializeField] private float _attackDistance;
 
-    private Vision _vision;
+    private PlayerScanner _vision;
     private Rigidbody2D _rigidBody;
     private Animator _animator;
     private bool _isFree;
 
     private float ReturnTimeOfAction => GetRandomValue(0f, _maxTimeToAction);
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         Init();
     }
 
@@ -37,18 +39,18 @@ public class Bird : Character
     {
         _rigidBody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
-        _vision = GetComponent<Vision>();
+        _vision = GetComponent<PlayerScanner>();
         _isFree = true;
     }
 
     private void OnEnable()
     {
-        _vision.Viewed += PrepareToFight;
+        _vision.Viewed += GoToAttackDistance;
     }
 
     private void OnDisable()
     {
-        _vision.Viewed -= PrepareToFight;
+        _vision.Viewed -= GoToAttackDistance;
 
     }
 
@@ -59,14 +61,17 @@ public class Bird : Character
 
     private IEnumerator Behaviour()
     {
-        var wait = new WaitForSeconds(ReturnTimeOfAction);
+        var wait = new WaitForEndOfFrame();
 
         while (IsAlive)
         {
+            Debug.Log("Стою");
             if (IsGrounded)
             {
+                Debug.Log("На земле");
                 if (_isFree)
                 {
+                    Debug.Log("Свободен");
                     float maxChance = 1f;
                     float searchChance = 0.7f;
                     float eatChance = 0.3f;
@@ -100,7 +105,7 @@ public class Bird : Character
 
     private IEnumerator Idle()
     {
-
+        Debug.Log("IDLE");
         var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
 
         while (_isFree)
@@ -117,30 +122,29 @@ public class Bird : Character
         yield break;
     }
 
-    private void PrepareToFight(Transform target)
+    private void GoToAttackDistance(Player target)
     {
-        if (target.gameObject.TryGetComponent<Player>(out _))
+        float currentDistance = transform.position.x - target.transform.position.x;
+
+        do
         {
-            float currentDistance = transform.position.x - target.position.x;
+            Vector2 attackPosition = new Vector2(target.transform.position.x - _attackDistance, target.transform.position.y);
 
-            do
-            {
-                Vector2 attackPosition = new Vector2(target.position.x - _attackDistance, target.position.y);
+            transform.position = Vector2.MoveTowards(transform.position, attackPosition, _speed * Time.deltaTime);
+            _rigidBody.AddForce(attackPosition + Vector2.up * GetRandomValue(_minJumpForce,_maxJumpForce)*Time.deltaTime);
+            _animator.SetTrigger(FlyTrigger);
 
-                transform.position = Vector2.MoveTowards(transform.position, attackPosition, _speed * Time.deltaTime);
-
-                _animator.SetTrigger(FlyTrigger);
-
-            } while (currentDistance >= _attackDistance);
-        }
+        } while (currentDistance >= _attackDistance);
     }
 
     private IEnumerator Eat()
     {
+        Debug.Log("Ща кушоц");
         var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
 
         while (_isFree)
         {
+            Debug.Log("ЖРООООТЬ");
             _animator.SetTrigger(EatTrigger);
 
             yield return waitSeconds;
@@ -165,6 +169,8 @@ public class Bird : Character
 
     private IEnumerator Search()
     {
+        Debug.Log("Ща полечу");
+
         var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
         var waitEndFrame = new WaitForEndOfFrame();
 
@@ -179,8 +185,7 @@ public class Bird : Character
             do
             {
                 _animator.SetTrigger(FlyTrigger);
-
-                yield return waitEndFrame;
+                Debug.Log("ЛЕЧУУУУУ");
 
             } while (!IsGrounded);
 

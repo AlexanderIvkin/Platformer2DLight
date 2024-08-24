@@ -174,11 +174,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1c2d5469f134f341aa1991814a65ab9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 10
+  _maxHealth: 5000
   _damage: 1
   _attackPerSecond: 3
   _scaleFactor: 1
-  _minJumpForce: 4
+  _minJumpForce: 5
   _maxJumpForce: 10
   _speed: 6
   _maxTimeToAction: 4
@@ -1203,6 +1203,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8079945041131590027, guid: 38939a8f61b368747a02cb575ed2e633, type: 3}
+      propertyPath: _maxHealth
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8079945041131590027, guid: 38939a8f61b368747a02cb575ed2e633, type: 3}
       propertyPath: _walletView
       value: 
       objectReference: {fileID: 1398395435}
@@ -1229,11 +1233,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3083864363720540814, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -36.6
+      value: -31
       objectReference: {fileID: 0}
     - target: {fileID: 3083864363720540814, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 37.9
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3083864363720540814, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1271,8 +1275,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bird
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8342580525900468627, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2322547891906888417, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
     m_AddedGameObjects: []
@@ -1310,7 +1313,7 @@ PrefabInstance:
       objectReference: {fileID: 2071189050}
     - target: {fileID: 3093244906823613400, guid: b92d316d71f9ad440a9021adaf5ac9bd, type: 3}
       propertyPath: _coinRadius
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3093244906823613400, guid: b92d316d71f9ad440a9021adaf5ac9bd, type: 3}
       propertyPath: _searchingLayerNumber

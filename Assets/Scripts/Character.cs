@@ -22,7 +22,7 @@ public abstract class Character : MonoBehaviour
     protected Animator Animator;
 
 
-    private void Awake()
+    protected virtual void Awake()
     {
         Init();
     }
@@ -91,6 +91,7 @@ public abstract class Character : MonoBehaviour
             yield return wait;
         }
 
+        yield break;
     }
 
     private void Init()
@@ -102,8 +103,11 @@ public abstract class Character : MonoBehaviour
         Animator = GetComponent<Animator>();
     }
 
-    private void ToDie()
+    protected virtual void ToDie()
     {
+        StopAllCoroutines();
+        Debug.Log("Сдох");
+
         Animator.SetTrigger(DeathTrigger);
 
         IsAlive = false;
