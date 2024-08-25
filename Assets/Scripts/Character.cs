@@ -17,7 +17,7 @@ public abstract class Character : MonoBehaviour
     private Health _health;
 
     protected bool IsGrounded;
-    protected bool IsWorks;
+    protected bool IsFree;
     protected bool IsAlive;
     protected Animator Animator;
 
@@ -44,7 +44,7 @@ public abstract class Character : MonoBehaviour
         TargetCheck(collision);
     }
 
-    private void GroundCheck (Collision2D collision)
+    private void GroundCheck(Collision2D collision)
     {
         if (collision.gameObject.TryGetComponent<Ground>(out _))
         {
@@ -81,6 +81,8 @@ public abstract class Character : MonoBehaviour
 
         var wait = new WaitForSeconds(speedFactor);
 
+        IsFree = false;
+
         while (target != null && target.IsAlive)
         {
             Debug.Log("¿“¿ ”ﬁ");
@@ -89,6 +91,8 @@ public abstract class Character : MonoBehaviour
             Animator.SetTrigger(AttackTrigger);
 
             yield return wait;
+
+            IsFree = true;
         }
 
         yield break;
@@ -98,7 +102,7 @@ public abstract class Character : MonoBehaviour
     {
         _health = new Health(_maxHealth);
         IsAlive = true;
-        IsWorks = false;
+        IsFree = true;
         IsGrounded = false;
         Animator = GetComponent<Animator>();
     }

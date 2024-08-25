@@ -24,7 +24,6 @@ public class Bird : Character
     private PlayerScanner _vision;
     private Rigidbody2D _rigidBody;
     private Animator _animator;
-    private bool _isFree;
 
     private float ReturnTimeOfAction => GetRandomValue(0f, _maxTimeToAction);
 
@@ -40,7 +39,6 @@ public class Bird : Character
         _rigidBody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _vision = GetComponent<PlayerScanner>();
-        _isFree = true;
     }
 
     private void OnEnable()
@@ -70,7 +68,7 @@ public class Bird : Character
             {
                 Debug.Log("На земле");
 
-                if (_isFree)
+                if (IsFree)
                 {
                     Debug.Log("Свободен");
                     float maxChance = 1f;
@@ -108,17 +106,17 @@ public class Bird : Character
     {
         Debug.Log("IDLE");
         var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
+        IsFree = false;
 
-        while (_isFree)
+        while (!IsFree)
         {
             _animator.SetTrigger(IDLETrigger);
 
             yield return waitSeconds;
+            IsFree = true;
 
-            _isFree = false;
         }
 
-        _isFree = true;
 
         yield break;
     }
@@ -132,7 +130,7 @@ public class Bird : Character
             Vector2 attackPosition = new Vector2(target.transform.position.x - _attackDistance, target.transform.position.y);
 
             transform.position = Vector2.MoveTowards(transform.position, attackPosition, _speed * Time.deltaTime);
-            _rigidBody.AddForce(attackPosition + Vector2.up * GetRandomValue(_minJumpForce,_maxJumpForce)*Time.deltaTime);
+            _rigidBody.AddForce(attackPosition + Vector2.up * GetRandomValue(_minJumpForce, _maxJumpForce) * Time.deltaTime);
             _animator.SetTrigger(FlyTrigger);
 
         } while (currentDistance >= _attackDistance);
@@ -142,18 +140,18 @@ public class Bird : Character
     {
         Debug.Log("Ща кушоц");
         var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
+        IsFree = false;
 
-        while (_isFree)
+        while (!IsFree)
         {
             Debug.Log("ЖРООООТЬ");
             _animator.SetTrigger(EatTrigger);
 
             yield return waitSeconds;
 
-            _isFree = false;
+            IsFree = true;
         }
 
-        _isFree = true;
 
         yield break;
     }
@@ -180,8 +178,9 @@ public class Bird : Character
         Flip(direction.x);
 
         _rigidBody.AddForce(direction * GetRandomValue(_minJumpForce, _maxJumpForce), ForceMode2D.Impulse);
+        IsFree = false;
 
-        while (_isFree)
+        while (!IsFree)
         {
             do
             {
@@ -194,10 +193,9 @@ public class Bird : Character
 
             yield return waitSeconds;
 
-            _isFree = false;
+            IsFree = true;
         }
 
-        _isFree = true;
 
         yield break;
     }
