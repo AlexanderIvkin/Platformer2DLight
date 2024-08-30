@@ -27,12 +27,12 @@ public abstract class Character : MonoBehaviour
         Init();
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         _health.Dead += ToDie;
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         _health.Dead -= ToDie;
     }
@@ -60,7 +60,7 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    protected void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.TryGetComponent<Ground>(out _))
         {
@@ -91,9 +91,9 @@ public abstract class Character : MonoBehaviour
             Animator.SetTrigger(AttackTrigger);
 
             yield return wait;
-
-            IsFree = true;
         }
+
+        IsFree = true;
 
         yield break;
     }

@@ -31,15 +31,19 @@ public class Player : Character
         _wallet.SetTextMeshProUGUI(_walletView);
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         _inputScaner.Jumped += Jump;
         _inputScaner.Moved += Move;
         _inputScaner.Digging += Dig;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
+
         _inputScaner.Jumped -= Jump;
         _inputScaner.Moved -= Move;
         _inputScaner.Digging -= Dig;
@@ -62,12 +66,15 @@ public class Player : Character
 
     private void Move(float direction)
     {
-        Flip(direction);
-        transform.Translate(_speed * direction * Time.deltaTime * Vector2.right);
-
-        if (IsGrounded)
+        if (IsAlive)
         {
-            Animator.SetFloat(WalkAnimatorParameter, Mathf.Abs(direction));
+            Flip(direction);
+            transform.Translate(_speed * direction * Time.deltaTime * Vector2.right);
+
+            if (IsGrounded)
+            {
+                Animator.SetFloat(WalkAnimatorParameter, Mathf.Abs(direction));
+            }
         }
     }
 

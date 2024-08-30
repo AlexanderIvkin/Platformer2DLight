@@ -41,15 +41,18 @@ public class Bird : Character
         _vision = GetComponent<PlayerScanner>();
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         _vision.Viewed += GoToAttackDistance;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
-        _vision.Viewed -= GoToAttackDistance;
+        base.OnDisable();
 
+        _vision.Viewed -= GoToAttackDistance;
     }
 
     private void Start()
@@ -125,33 +128,37 @@ public class Bird : Character
     {
         float currentDistance = transform.position.x - target.transform.position.x;
 
+            _rigidBody.AddForce((target.transform.position - transform.position).normalized + Vector3.up * GetRandomValue(_minJumpForce,_maxJumpForce) );
         do
         {
-            Vector2 attackPosition = new Vector2(target.transform.position.x - _attackDistance, target.transform.position.y);
 
-            transform.position = Vector2.MoveTowards(transform.position, attackPosition, _speed * Time.deltaTime);
-            _rigidBody.AddForce(attackPosition + Vector2.up * GetRandomValue(_minJumpForce, _maxJumpForce) * Time.deltaTime);
-            _animator.SetTrigger(FlyTrigger);
+            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, _speed * Time.deltaTime);
 
-        } while (currentDistance >= _attackDistance);
+            //_rigidBody.velocity = Vector2.MoveTowards(transform.position, attackPosition, _speed * Time.deltaTime);
+
+            do
+            {
+                _animator.SetTrigger(FlyTrigger);
+            } while (!IsGrounded);
+
+            _animator.SetTrigger(IDLETrigger);
+
+        } while (currentDistance > _attackDistance);
     }
 
     private IEnumerator Eat()
     {
-        Debug.Log("Ùà êóøîö");
         var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
         IsFree = false;
 
         while (!IsFree)
         {
-            Debug.Log("ÆĞÎÎÎÎÒÜ");
             _animator.SetTrigger(EatTrigger);
 
             yield return waitSeconds;
 
             IsFree = true;
         }
-
 
         yield break;
     }
@@ -168,10 +175,7 @@ public class Bird : Character
 
     private IEnumerator Search()
     {
-        Debug.Log("Ùà ïîëå÷ó");
-
         var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
-        var waitEndFrame = new WaitForEndOfFrame();
 
         Vector2 direction = GetRandomDirection();
 
@@ -185,8 +189,6 @@ public class Bird : Character
             do
             {
                 _animator.SetTrigger(FlyTrigger);
-                Debug.Log("ËÅ×ÓÓÓÓÓ");
-
             } while (!IsGrounded);
 
             _animator.SetTrigger(IDLETrigger);
@@ -195,7 +197,6 @@ public class Bird : Character
 
             IsFree = true;
         }
-
 
         yield break;
     }
