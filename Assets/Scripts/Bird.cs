@@ -131,8 +131,9 @@ public class Bird : Character
             _rigidBody.AddForce((target.transform.position - transform.position).normalized + Vector3.up * GetRandomValue(_minJumpForce,_maxJumpForce) );
         do
         {
+            Vector2 attackPosition = new Vector2(target.transform.position.x - _attackDistance, target.transform.position.y);
 
-            transform.position = Vector2.MoveTowards(transform.position, target.transform.position, _speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, attackPosition, _speed * Time.deltaTime);
 
             //_rigidBody.velocity = Vector2.MoveTowards(transform.position, attackPosition, _speed * Time.deltaTime);
 
