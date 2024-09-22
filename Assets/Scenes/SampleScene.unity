@@ -431,23 +431,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &1767150768 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7127066372395937323, guid: 2fb8a0af80d0b324291f91020b2c733e, type: 3}
-  m_PrefabInstance: {fileID: 1346489673434675620}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1767150771
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1767150768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca0e527a2da544e4492f2686daa7d800, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2071189049
 GameObject:
   m_ObjectHideFlags: 0
@@ -1088,10 +1071,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7127066372395937323, guid: 2fb8a0af80d0b324291f91020b2c733e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1767150771}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2fb8a0af80d0b324291f91020b2c733e, type: 3}
 --- !u!1001 &1569995192624325847
 PrefabInstance:
@@ -1215,8 +1195,20 @@ PrefabInstance:
       value: Bird
       objectReference: {fileID: 0}
     - target: {fileID: 4804403837316398357, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
-      propertyPath: _maxHealth
-      value: 10
+      propertyPath: _speed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4804403837316398357, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
+      propertyPath: _maxJumpForce
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4804403837316398357, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
+      propertyPath: _minJumpForce
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6188379828870940979, guid: 39d982f66ae5ea4438098f852c7d2977, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

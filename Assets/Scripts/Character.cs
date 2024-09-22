@@ -11,8 +11,8 @@ public abstract class Character : MonoBehaviour
     [SerializeField] private int _maxHealth;
     [SerializeField] private int _damage;
     [SerializeField] private int _attackPerSecond;
+    [SerializeField] private float _scaleFactor;
 
-    private float _scaleFactor;
     private Health _health;
 
     protected bool IsGrounded;
