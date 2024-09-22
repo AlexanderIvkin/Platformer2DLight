@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -66,7 +64,7 @@ public class Player : Character
 
     private void Move(float direction)
     {
-        if (IsAlive)
+        if (ReadyToAction)
         {
             Flip(direction);
             transform.Translate(_speed * direction * Time.deltaTime * Vector2.right);
@@ -94,7 +92,6 @@ public class Player : Character
 
     protected override void ToDie()
     {
-
         base.ToDie();
 
         _rigidbody2D.velocity = Vector2.zero;

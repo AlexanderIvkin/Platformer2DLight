@@ -1,12 +1,9 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(PlayerScanner))]
 
 public class Bird : Character
 {
@@ -17,11 +14,9 @@ public class Bird : Character
     [SerializeField] private float _minJumpForce;
     [SerializeField] private float _maxJumpForce;
     [SerializeField] private float _speed;
-
     [SerializeField] private float _maxTimeToAction;
-    [SerializeField] private float _attackDistance;
 
-    private PlayerScanner _vision;
+    private float _attackDistance;
     private Rigidbody2D _rigidBody;
     private Animator _animator;
 
@@ -38,21 +33,14 @@ public class Bird : Character
     {
         _rigidBody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
-        _vision = GetComponent<PlayerScanner>();
     }
 
-    protected override void OnEnable()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        base.OnEnable();
-
-        _vision.Viewed += GoToAttackDistance;
-    }
-
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-
-        _vision.Viewed -= GoToAttackDistance;
+        if (collision != null && collision.gameObject.TryGetComponent<Player>(out Player target))
+        {
+            GoToAttackDistance(target);
+        }
     }
 
     private void Start()
@@ -64,16 +52,12 @@ public class Bird : Character
     {
         var wait = new WaitForEndOfFrame();
 
-        while (IsAlive)
+        while (ReadyToAction)
         {
-            Debug.Log("Стою");
             if (IsGrounded)
             {
-                Debug.Log("На земле");
-
                 if (IsFree)
                 {
-                    Debug.Log("Свободен");
                     float maxChance = 1f;
                     float searchChance = 0.7f;
                     float eatChance = 0.3f;
@@ -107,8 +91,8 @@ public class Bird : Character
 
     private IEnumerator Idle()
     {
-        Debug.Log("IDLE");
         var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
+
         IsFree = false;
 
         while (!IsFree)
@@ -117,9 +101,7 @@ public class Bird : Character
 
             yield return waitSeconds;
             IsFree = true;
-
         }
-
 
         yield break;
     }
@@ -128,14 +110,13 @@ public class Bird : Character
     {
         float currentDistance = transform.position.x - target.transform.position.x;
 
-            _rigidBody.AddForce((target.transform.position - transform.position).normalized + Vector3.up * GetRandomValue(_minJumpForce,_maxJumpForce) );
+        _rigidBody.AddForce((target.transform.position - transform.position).normalized + Vector3.up * GetRandomValue(_minJumpForce, _maxJumpForce));
+
         do
         {
             Vector2 attackPosition = new Vector2(target.transform.position.x - _attackDistance, target.transform.position.y);
 
             transform.position = Vector2.MoveTowards(transform.position, attackPosition, _speed * Time.deltaTime);
-
-            //_rigidBody.velocity = Vector2.MoveTowards(transform.position, attackPosition, _speed * Time.deltaTime);
 
             do
             {
@@ -150,6 +131,7 @@ public class Bird : Character
     private IEnumerator Eat()
     {
         var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
+
         IsFree = false;
 
         while (!IsFree)

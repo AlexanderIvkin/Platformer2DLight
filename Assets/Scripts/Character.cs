@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -12,13 +11,13 @@ public abstract class Character : MonoBehaviour
     [SerializeField] private int _maxHealth;
     [SerializeField] private int _damage;
     [SerializeField] private int _attackPerSecond;
-    [SerializeField] private float _scaleFactor;
 
+    private float _scaleFactor;
     private Health _health;
 
     protected bool IsGrounded;
     protected bool IsFree;
-    protected bool IsAlive;
+    protected bool ReadyToAction;
     protected Animator Animator;
 
 
@@ -39,12 +38,12 @@ public abstract class Character : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        GroundCheck(collision);
+        GroundCollisionCheck(collision);
 
-        TargetCheck(collision);
+        ChatacterCollisionCheck(collision);
     }
 
-    private void GroundCheck(Collision2D collision)
+    private void GroundCollisionCheck(Collision2D collision)
     {
         if (collision.gameObject.TryGetComponent<Ground>(out _))
         {
@@ -52,7 +51,7 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    private void TargetCheck(Collision2D collision)
+    private void ChatacterCollisionCheck(Collision2D collision)
     {
         if (collision.gameObject.TryGetComponent<Character>(out Character target))
         {
@@ -75,17 +74,14 @@ public abstract class Character : MonoBehaviour
 
     protected IEnumerator Attack(Character target)
     {
-        Debug.Log("Начинаю атаку");
-
         float speedFactor = 1 / _attackPerSecond;
 
         var wait = new WaitForSeconds(speedFactor);
 
         IsFree = false;
 
-        while (target != null && target.IsAlive)
+        while (target != null && target.ReadyToAction)
         {
-            Debug.Log("АТАКУЮ");
             _health.TryRemove(target._damage);
 
             Animator.SetTrigger(AttackTrigger);
@@ -101,7 +97,7 @@ public abstract class Character : MonoBehaviour
     private void Init()
     {
         _health = new Health(_maxHealth);
-        IsAlive = true;
+        ReadyToAction = true;
         IsFree = true;
         IsGrounded = false;
         Animator = GetComponent<Animator>();
@@ -110,11 +106,10 @@ public abstract class Character : MonoBehaviour
     protected virtual void ToDie()
     {
         StopAllCoroutines();
-        Debug.Log("Сдох");
 
         Animator.SetTrigger(DeathTrigger);
 
-        IsAlive = false;
+        ReadyToAction = false;
     }
 
     protected void Flip(float direction)

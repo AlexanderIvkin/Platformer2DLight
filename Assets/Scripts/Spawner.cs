@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private Coin _coin;
     [SerializeField] private float _delay;
-    [SerializeField] private float _coinRadius;
+    [SerializeField] private float _coinDiametr;
     [SerializeField] private int _maxCount;
     [SerializeField] private int _searchingLayerNumber;
 
@@ -38,7 +37,7 @@ public class Spawner : MonoBehaviour
         {
             freePlaceCoordinate = ReturnRandomPositionOnGround();
         }
-        while (Physics2D.OverlapCircle(freePlaceCoordinate, _coinRadius, _searchingLayerNumber));
+        while (Physics2D.OverlapCircle(freePlaceCoordinate, _coinDiametr, _searchingLayerNumber));
 
         return freePlaceCoordinate;
     }

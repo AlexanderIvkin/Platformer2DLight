@@ -135,9 +135,6 @@ PrefabInstance:
       addedObject: {fileID: 6095858686782846956}
     - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: a7876360adebb504faf98781b4c00855, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 454896055699623548}
-    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: a7876360adebb504faf98781b4c00855, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7443217472878813809}
     - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: a7876360adebb504faf98781b4c00855, type: 3}
       insertIndex: -1
@@ -231,18 +228,6 @@ CapsuleCollider2D:
   m_Offset: {x: 1.1700001, y: 2.682776}
   m_Size: {x: 2.12, y: 4.974448}
   m_Direction: 0
---- !u!114 &454896055699623548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4180483501420174061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 262debf737f1a0c4a8541bf74a61d874, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &7443217472878813809
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -290,7 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1c2d5469f134f341aa1991814a65ab9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 5000
+  _maxHealth: 10
   _damage: 1
   _attackPerSecond: 3
   _scaleFactor: 1
