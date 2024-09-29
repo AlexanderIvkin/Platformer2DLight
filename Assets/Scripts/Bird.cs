@@ -98,14 +98,14 @@ public class Bird : Character
     {
         var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
 
-        IsFree = false;
+        ReadyToAction = false;
 
-        while (!IsFree)
+        while (!ReadyToAction)
         {
             _animator.SetTrigger(IdleTrigger);
 
             yield return waitSeconds;
-            IsFree = true;
+            ReadyToAction = true;
         }
 
         yield break;
@@ -137,15 +137,15 @@ public class Bird : Character
     {
         var waitSeconds = new WaitForSeconds(GetRandomPositiveNumber(_maxTimeToAction));
 
-        IsFree = false;
+        ReadyToAction = false;
 
-        while (!IsFree)
+        while (!ReadyToAction)
         {
             _animator.SetTrigger(EatTrigger);
 
             yield return waitSeconds;
 
-            IsFree = true;
+            ReadyToAction = true;
         }
 
         yield break;
@@ -170,9 +170,9 @@ public class Bird : Character
         Flip(direction.x);
 
         _rigidBody.AddForce(direction * GetRandomValue(_minJumpForce, _maxJumpForce), ForceMode2D.Impulse);
-        IsFree = false;
+        ReadyToAction = false;
 
-        while (!IsFree)
+        while (!ReadyToAction)
         {
             do
             {
@@ -183,7 +183,7 @@ public class Bird : Character
 
             yield return waitSeconds;
 
-            IsFree = true;
+            ReadyToAction = true;
         }
 
         yield break;
