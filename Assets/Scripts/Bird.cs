@@ -9,7 +9,7 @@ public class Bird : Character
 {
     private readonly int EatTrigger = Animator.StringToHash("Eat");
     private readonly int FlyTrigger = Animator.StringToHash("Fly");
-    private readonly int IDLETrigger = Animator.StringToHash("IDLE");
+    private readonly int IdleTrigger = Animator.StringToHash("IDLE");
 
     [SerializeField] private float _minJumpForce;
     [SerializeField] private float _maxJumpForce;
@@ -37,7 +37,7 @@ public class Bird : Character
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision != null && collision.gameObject.TryGetComponent<Player>(out Player target))
+        if (collision != null && collision.TryGetComponent<Player>(out Player target))
         {
             GoToAttackDistance(target);
         }
@@ -54,31 +54,36 @@ public class Bird : Character
 
         while (ReadyToAction)
         {
-            if (IsGrounded)
-            {
-                if (IsFree)
-                {
-                    float maxChance = 1f;
-                    float searchChance = 0.7f;
-                    float eatChance = 0.3f;
-                    float currentChance = GetRandomPositiveNumber(maxChance);
-
-                    if (currentChance > searchChance)
-                    {
-                        StartCoroutine(Search());
-                    }
-                    else if (currentChance > eatChance)
-                    {
-                        StartCoroutine(Eat());
-                    }
-                    else
-                    {
-                        StartCoroutine(Idle());
-                    }
-                }
-            }
+            DoAction();
 
             yield return wait;
+        }
+    }
+
+    private void DoAction()
+    {
+        if (IsGrounded)
+        {
+            if (ReadyToAction)
+            {
+                float maxChance = 1f;
+                float searchChance = 0.7f;
+                float eatChance = 0.3f;
+                float currentChance = GetRandomPositiveNumber(maxChance);
+
+                if (currentChance > searchChance)
+                {
+                    StartCoroutine(Search());
+                }
+                else if (currentChance > eatChance)
+                {
+                    StartCoroutine(Eat());
+                }
+                else
+                {
+                    StartCoroutine(Idle());
+                }
+            }
         }
     }
 
@@ -97,7 +102,7 @@ public class Bird : Character
 
         while (!IsFree)
         {
-            _animator.SetTrigger(IDLETrigger);
+            _animator.SetTrigger(IdleTrigger);
 
             yield return waitSeconds;
             IsFree = true;
@@ -123,7 +128,7 @@ public class Bird : Character
                 _animator.SetTrigger(FlyTrigger);
             } while (!IsGrounded);
 
-            _animator.SetTrigger(IDLETrigger);
+            _animator.SetTrigger(IdleTrigger);
 
         } while (currentDistance > _attackDistance);
     }
@@ -174,7 +179,7 @@ public class Bird : Character
                 _animator.SetTrigger(FlyTrigger);
             } while (!IsGrounded);
 
-            _animator.SetTrigger(IDLETrigger);
+            _animator.SetTrigger(IdleTrigger);
 
             yield return waitSeconds;
 

@@ -16,7 +16,6 @@ public abstract class Character : MonoBehaviour
     private Health _health;
 
     protected bool IsGrounded;
-    protected bool IsFree;
     protected bool ReadyToAction;
     protected Animator Animator;
 
@@ -78,7 +77,7 @@ public abstract class Character : MonoBehaviour
 
         var wait = new WaitForSeconds(speedFactor);
 
-        IsFree = false;
+        ReadyToAction = false;
 
         while (target != null && target.ReadyToAction)
         {
@@ -89,7 +88,7 @@ public abstract class Character : MonoBehaviour
             yield return wait;
         }
 
-        IsFree = true;
+        ReadyToAction = true;
 
         yield break;
     }
@@ -98,7 +97,6 @@ public abstract class Character : MonoBehaviour
     {
         _health = new Health(_maxHealth);
         ReadyToAction = true;
-        IsFree = true;
         IsGrounded = false;
         Animator = GetComponent<Animator>();
     }
