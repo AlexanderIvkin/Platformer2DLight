@@ -93,7 +93,7 @@ public abstract class Character : MonoBehaviour
         yield break;
     }
 
-    private void Init()
+    protected virtual void Init()
     {
         _health = new Health(_maxHealth);
         ReadyToAction = true;

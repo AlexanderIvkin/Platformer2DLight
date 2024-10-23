@@ -11,22 +11,25 @@ public class Player : Character
     private readonly int DigTrigger = Animator.StringToHash("Dig");
     private readonly string WalkAnimatorParameter = "Speed";
 
-    [SerializeField] private TextMeshProUGUI _walletView;
+    [SerializeField] private TextMeshProUGUI _textMeshPro;
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpForce;
 
     private Rigidbody2D _rigidbody2D;
+    
     private InputScaner _inputScaner;
-    private Wallet _wallet = new Wallet();
+    private Wallet _wallet;
+    private WalletView _walletView;
 
     protected override void Awake()
     {
         base.Awake();
 
+        Init();
+
         _rigidbody2D = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
         _inputScaner = GetComponent<InputScaner>();
-        _wallet.SetTextMeshProUGUI(_walletView);
     }
 
     protected override void OnEnable()
@@ -51,15 +54,28 @@ public class Player : Character
     {
         base.OnCollisionEnter2D(collision);
 
-        if (collision.gameObject.TryGetComponent<Coin>(out _))
-        {
-            _wallet.Add();
-        }
+        CoinPickUp(collision);
     }
 
     private void Update()
     {
-        _wallet.Show();
+        _walletView.Show();
+    }
+    
+    protected override void Init()
+    {
+        base.Init();
+
+        _wallet = new Wallet();
+        _walletView = new WalletView(_wallet, _textMeshPro);
+    }
+
+    protected override void ToDie()
+    {
+        base.ToDie();
+
+        _rigidbody2D.velocity = Vector2.zero;
+        _rigidbody2D.mass = 500;
     }
 
     private void Move(float direction)
@@ -90,11 +106,13 @@ public class Player : Character
         Animator.SetTrigger(DigTrigger);
     }
 
-    protected override void ToDie()
+    private void CoinPickUp(Collision2D collision)
     {
-        base.ToDie();
+        if (collision.gameObject.TryGetComponent<Coin>(out Coin coin))
+        {
+            coin.gameObject.SetActive(false);
 
-        _rigidbody2D.velocity = Vector2.zero;
-        _rigidbody2D.mass = 500;
+            _wallet.Add();
+        }
     }
 }

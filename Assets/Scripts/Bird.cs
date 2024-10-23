@@ -29,8 +29,10 @@ public class Bird : Character
         Init();
     }
 
-    private void Init()
+    protected override void Init()
     {
+        base.Init();
+
         _rigidBody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
     }
@@ -45,10 +47,10 @@ public class Bird : Character
 
     private void Start()
     {
-        StartCoroutine(Behaviour());
+        StartCoroutine(Behaviouring());
     }
 
-    private IEnumerator Behaviour()
+    private IEnumerator Behaviouring()
     {
         var wait = new WaitForEndOfFrame();
 
