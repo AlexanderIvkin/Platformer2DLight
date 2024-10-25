@@ -1,14 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine;
 
 public class AnimationShower
 {
-    private List<int> _animationsTriggers = new List<int>();
+    private Animator _animator;
 
-    public AnimationShower()
+    public AnimationShower(Animator animator)
     {
-
+        _animator = animator;
     }
 
-    
+    public void Show(int triggerName)
+    {
+        _animator.SetTrigger(triggerName);
+    }
+
+    public void Show(string parameterName, float paremeterValue)
+    {
+        _animator.SetFloat(parameterName, Mathf.Abs(paremeterValue));
+    }
 }

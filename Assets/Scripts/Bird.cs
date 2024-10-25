@@ -18,7 +18,6 @@ public class Bird : Character
 
     private float _attackDistance;
     private Rigidbody2D _rigidBody;
-    private Animator _animator;
 
     private float ReturnTimeOfAction => GetRandomValue(0f, _maxTimeToAction);
 
@@ -34,7 +33,7 @@ public class Bird : Character
         base.Init();
 
         _rigidBody = GetComponent<Rigidbody2D>();
-        _animator = GetComponent<Animator>();
+        _attackDistance = 6f;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -54,7 +53,7 @@ public class Bird : Character
     {
         var wait = new WaitForEndOfFrame();
 
-        while (ReadyToAction)
+        while (IsAlive)
         {
             DoAction();
 
@@ -104,7 +103,7 @@ public class Bird : Character
 
         while (!ReadyToAction)
         {
-            _animator.SetTrigger(IdleTrigger);
+            AnimationShower.Show(IdleTrigger);
 
             yield return waitSeconds;
             ReadyToAction = true;
@@ -127,10 +126,10 @@ public class Bird : Character
 
             do
             {
-                _animator.SetTrigger(FlyTrigger);
+                AnimationShower.Show(FlyTrigger);
             } while (!IsGrounded);
 
-            _animator.SetTrigger(IdleTrigger);
+            AnimationShower.Show(IdleTrigger);
 
         } while (currentDistance > _attackDistance);
     }
@@ -143,7 +142,7 @@ public class Bird : Character
 
         while (!ReadyToAction)
         {
-            _animator.SetTrigger(EatTrigger);
+            AnimationShower.Show(EatTrigger);
 
             yield return waitSeconds;
 
@@ -178,10 +177,10 @@ public class Bird : Character
         {
             do
             {
-                _animator.SetTrigger(FlyTrigger);
+                AnimationShower.Show(FlyTrigger);
             } while (!IsGrounded);
 
-            _animator.SetTrigger(IdleTrigger);
+            AnimationShower.Show(IdleTrigger);
 
             yield return waitSeconds;
 

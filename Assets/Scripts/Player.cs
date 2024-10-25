@@ -87,7 +87,7 @@ public class Player : Character
 
             if (IsGrounded)
             {
-                Animator.SetFloat(WalkAnimatorParameter, Mathf.Abs(direction));
+                AnimationShower.Show(WalkAnimatorParameter, direction);
             }
         }
     }
@@ -96,14 +96,14 @@ public class Player : Character
     {
         if (IsGrounded)
         {
-            Animator.SetTrigger(JumpTrigger);
+            AnimationShower.Show(JumpTrigger);
             _rigidbody2D.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
         }
     }
 
     private void Dig()
     {
-        Animator.SetTrigger(DigTrigger);
+        AnimationShower.Show(DigTrigger);
     }
 
     private void CoinPickUp(Collision2D collision)

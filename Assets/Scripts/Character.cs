@@ -18,7 +18,9 @@ public abstract class Character : MonoBehaviour
     protected bool IsGrounded;
     protected bool ReadyToAction;
     protected Animator Animator;
+    protected AnimationShower AnimationShower;
 
+    protected bool IsAlive => _health.CurrentValue > 0;
 
     protected virtual void Awake()
     {
@@ -99,13 +101,14 @@ public abstract class Character : MonoBehaviour
         ReadyToAction = true;
         IsGrounded = false;
         Animator = GetComponent<Animator>();
+        AnimationShower = new AnimationShower(Animator);
     }
 
     protected virtual void ToDie()
     {
         StopAllCoroutines();
 
-        Animator.SetTrigger(DeathTrigger);
+        AnimationShower.Show(DeathTrigger);
 
         ReadyToAction = false;
     }
