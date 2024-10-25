@@ -3,7 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(InputScaner))]
+[RequireComponent(typeof(InputReader))]
 
 public class Player : Character
 {
@@ -17,7 +17,7 @@ public class Player : Character
 
     private Rigidbody2D _rigidbody2D;
     
-    private InputScaner _inputScaner;
+    private InputReader _inputScaner;
     private Wallet _wallet;
     private WalletView _walletView;
 
@@ -29,7 +29,7 @@ public class Player : Character
 
         _rigidbody2D = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
-        _inputScaner = GetComponent<InputScaner>();
+        _inputScaner = GetComponent<InputReader>();
     }
 
     protected override void OnEnable()

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class InputScaner : MonoBehaviour
+public class InputReader : MonoBehaviour
 {
     private const string Horizontal = "Horizontal";
 
