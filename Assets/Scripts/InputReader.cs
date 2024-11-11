@@ -5,12 +5,13 @@ public class InputReader : MonoBehaviour
 {
     private const string Horizontal = "Horizontal";
 
-    public event Action<float> Moved;
-    public event Action Jumped;
-    public event Action Digging;
+    private bool _isJump;
+    private bool _isDig;
 
     private KeyCode _jumpButton = KeyCode.Space;
     private KeyCode _digButton = KeyCode.Q;
+
+    public float Direction { get; private set; }
 
     private void Update()
     {
@@ -19,29 +20,36 @@ public class InputReader : MonoBehaviour
         ReadDigButton();
     }
 
+    public bool GetIsJump() => GetBoolAsTrigger(ref _isJump);
+
+    public bool GetIsDig() => GetBoolAsTrigger(ref _isDig);
+
     private void ReadJumpButton()
     {
         if (Input.GetKeyUp(_jumpButton))
         {
-            Jumped?.Invoke();
+            _isJump = true;
         }
     }
 
     private void ReadMoveButton()
     {
-        float direction = Input.GetAxis(Horizontal);
-
-        if (direction != 0)
-        {
-            Moved?.Invoke(Input.GetAxis(Horizontal));
-        }
+        Direction = Input.GetAxis(Horizontal);
     }
 
     private void ReadDigButton()
     {
         if (Input.GetKeyDown(_digButton))
         {
-            Digging?.Invoke();
+            _isDig = true;
         }
+    }
+
+    private bool GetBoolAsTrigger(ref bool value)
+    {
+        bool localValue = value;
+        value = false;
+
+        return localValue;
     }
 }

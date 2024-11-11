@@ -3,17 +3,14 @@ using TMPro;
 public class WalletView 
 {
     private TextMeshProUGUI _textView;
-    private Wallet _wallet;
-    private string _phrase = "Собрано осколков кошачьего сознания: ";
 
-    public WalletView(Wallet wallet, TextMeshProUGUI textView)
+    public WalletView(TextMeshProUGUI textView)
     {
-        _wallet = wallet;
         _textView = textView;
     }
 
-    public void Show()
+    public void Show(int count)
     {
-        _textView.text = _phrase + _wallet.Count;
+        _textView.text = count.ToString();
     }
 }

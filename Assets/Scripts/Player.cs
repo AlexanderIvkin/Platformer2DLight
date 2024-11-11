@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Mover))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(InputReader))]
 
@@ -15,9 +15,8 @@ public class Player : Character
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpForce;
 
-    private Rigidbody2D _rigidbody2D;
-    
-    private InputReader _inputScaner;
+    private Mover _mover;
+    private InputReader _inputReader;
     private Wallet _wallet;
     private WalletView _walletView;
 
@@ -26,28 +25,19 @@ public class Player : Character
         base.Awake();
 
         Init();
-
-        _rigidbody2D = GetComponent<Rigidbody2D>();
+        _mover = GetComponent<Mover>();
         Animator = GetComponent<Animator>();
-        _inputScaner = GetComponent<InputReader>();
+        _inputReader = GetComponent<InputReader>();
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
-
-        _inputScaner.Jumped += Jump;
-        _inputScaner.Moved += Move;
-        _inputScaner.Digging += Dig;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-
-        _inputScaner.Jumped -= Jump;
-        _inputScaner.Moved -= Move;
-        _inputScaner.Digging -= Dig;
     }
 
     protected override void OnCollisionEnter2D(Collision2D collision)
@@ -59,33 +49,31 @@ public class Player : Character
 
     private void Update()
     {
-        _walletView.Show();
+        _walletView.Show(_wallet.Count);
     }
-    
+
+    private void FixedUpdate()
+    {
+        Move(_inputReader.Direction);
+        Jump();
+        Dig();
+    }
+
     protected override void Init()
     {
         base.Init();
 
         _wallet = new Wallet();
-        _walletView = new WalletView(_wallet, _textMeshPro);
-    }
-
-    protected override void ToDie()
-    {
-        base.ToDie();
-
-        _rigidbody2D.velocity = Vector2.zero;
-        _rigidbody2D.mass = 500;
+        _walletView = new WalletView(_textMeshPro);
     }
 
     private void Move(float direction)
     {
         if (ReadyToAction)
         {
-            Flip(direction);
-            transform.Translate(_speed * direction * Time.deltaTime * Vector2.right);
+            _mover.Move(direction);
 
-            if (IsGrounded)
+            if (GroundDetector.IsGrounded)
             {
                 AnimationShower.Show(WalkAnimatorParameter, direction);
             }
@@ -94,16 +82,20 @@ public class Player : Character
 
     private void Jump()
     {
-        if (IsGrounded)
+        if (_inputReader.GetIsJump() && GroundDetector.IsGrounded && ReadyToAction)
         {
             AnimationShower.Show(JumpTrigger);
-            _rigidbody2D.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
+
+            _mover.Jump();
         }
     }
 
     private void Dig()
     {
-        AnimationShower.Show(DigTrigger);
+        if (GroundDetector.IsGrounded && _inputReader.GetIsDig())
+        {
+            AnimationShower.Show(DigTrigger);
+        }
     }
 
     private void CoinPickUp(Collision2D collision)

@@ -266,6 +266,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 0cba47e2b7119c045a05a184c875d204, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4686034495455129000}
+    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 0cba47e2b7119c045a05a184c875d204, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 654873140951576761}
+    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 0cba47e2b7119c045a05a184c875d204, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5953153536660721801}
+    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 0cba47e2b7119c045a05a184c875d204, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1696929417914961311}
   m_SourcePrefab: {fileID: 4843985084834002234, guid: 0cba47e2b7119c045a05a184c875d204, type: 3}
 --- !u!4 &8023636660895790740 stripped
 Transform:
@@ -340,8 +349,8 @@ MonoBehaviour:
   _maxHealth: 30
   _damage: 2
   _attackPerSecond: 2
-  _scaleFactor: 0
-  _walletView: {fileID: 0}
+  ScaleFactor: 0
+  _textMeshPro: {fileID: 0}
   _speed: 10
   _jumpForce: 30
 --- !u!114 &8674054916228892453
@@ -401,3 +410,41 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 7.4552784, y: 5.561224}
   m_EdgeRadius: 0
+--- !u!114 &654873140951576761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9192329374340607735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3db629c2ce74a9f42a74f038f0450e71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5953153536660721801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9192329374340607735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b891e548bc33d29479cb0eced3e41846, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 0
+  _jumpForce: 0
+--- !u!114 &1696929417914961311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9192329374340607735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb34d3595cfacf34189d39148adbd1a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

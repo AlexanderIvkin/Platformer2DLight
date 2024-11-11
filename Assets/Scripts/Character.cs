@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(GroundDetector))]
 
 public abstract class Character : MonoBehaviour
 {
@@ -11,14 +12,13 @@ public abstract class Character : MonoBehaviour
     [SerializeField] private int _maxHealth;
     [SerializeField] private int _damage;
     [SerializeField] private int _attackPerSecond;
-    [SerializeField] private float _scaleFactor;
 
     private Health _health;
 
-    protected bool IsGrounded;
     protected bool ReadyToAction;
     protected Animator Animator;
     protected AnimationShower AnimationShower;
+    protected GroundDetector GroundDetector;
 
     protected bool IsAlive => _health.CurrentValue > 0;
 
@@ -39,17 +39,7 @@ public abstract class Character : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        GroundCollisionCheck(collision);
-
         ChatacterCollisionCheck(collision);
-    }
-
-    private void GroundCollisionCheck(Collision2D collision)
-    {
-        if (collision.gameObject.TryGetComponent<Ground>(out _))
-        {
-            IsGrounded = true;
-        }
     }
 
     private void ChatacterCollisionCheck(Collision2D collision)
@@ -62,11 +52,6 @@ public abstract class Character : MonoBehaviour
 
     protected void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.TryGetComponent<Ground>(out _))
-        {
-            IsGrounded = false;
-        }
-
         if (collision.gameObject.TryGetComponent<Character>(out Character target))
         {
             StopCoroutine(Attack(target));
@@ -97,24 +82,19 @@ public abstract class Character : MonoBehaviour
 
     protected virtual void Init()
     {
-        _health = new Health(_maxHealth);
         ReadyToAction = true;
-        IsGrounded = false;
         Animator = GetComponent<Animator>();
+        GroundDetector = GetComponent<GroundDetector>();
+        _health = new Health(_maxHealth);
         AnimationShower = new AnimationShower(Animator);
     }
 
-    protected virtual void ToDie()
+    protected void ToDie()
     {
         StopAllCoroutines();
 
         AnimationShower.Show(DeathTrigger);
 
         ReadyToAction = false;
-    }
-
-    protected void Flip(float direction)
-    {
-        transform.localScale = new Vector3(Mathf.Sign(_scaleFactor * direction), transform.localScale.y, transform.localScale.z);
     }
 }

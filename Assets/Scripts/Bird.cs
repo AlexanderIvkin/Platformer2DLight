@@ -4,6 +4,8 @@ using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(RotatorToDirection))]
+
 
 public class Bird : Character
 {
@@ -18,6 +20,7 @@ public class Bird : Character
 
     private float _attackDistance;
     private Rigidbody2D _rigidBody;
+    private RotatorToDirection _rotatorToDirection;
 
     private float ReturnTimeOfAction => GetRandomValue(0f, _maxTimeToAction);
 
@@ -32,6 +35,7 @@ public class Bird : Character
     {
         base.Init();
 
+        _rotatorToDirection = GetComponent<RotatorToDirection>();
         _rigidBody = GetComponent<Rigidbody2D>();
         _attackDistance = 6f;
     }
@@ -63,7 +67,7 @@ public class Bird : Character
 
     private void DoAction()
     {
-        if (IsGrounded)
+        if (GroundDetector.IsGrounded)
         {
             if (ReadyToAction)
             {
@@ -127,7 +131,7 @@ public class Bird : Character
             do
             {
                 AnimationShower.Show(FlyTrigger);
-            } while (!IsGrounded);
+            } while (!GroundDetector.IsGrounded);
 
             AnimationShower.Show(IdleTrigger);
 
@@ -168,7 +172,7 @@ public class Bird : Character
 
         Vector2 direction = GetRandomDirection();
 
-        Flip(direction.x);
+        _rotatorToDirection.Rotate(direction.x);
 
         _rigidBody.AddForce(direction * GetRandomValue(_minJumpForce, _maxJumpForce), ForceMode2D.Impulse);
         ReadyToAction = false;
@@ -178,7 +182,7 @@ public class Bird : Character
             do
             {
                 AnimationShower.Show(FlyTrigger);
-            } while (!IsGrounded);
+            } while (!GroundDetector.IsGrounded);
 
             AnimationShower.Show(IdleTrigger);
 
