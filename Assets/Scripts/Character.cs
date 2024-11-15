@@ -39,10 +39,10 @@ public abstract class Character : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        ChatacterCollisionCheck(collision);
+        CheckCollisionCharacter(collision);
     }
 
-    private void ChatacterCollisionCheck(Collision2D collision)
+    private void CheckCollisionCharacter(Collision2D collision)
     {
         if (collision.gameObject.TryGetComponent<Character>(out Character target))
         {
